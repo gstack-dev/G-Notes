@@ -25,7 +25,7 @@ export function AboutDialog({ open, onOpenChange }: { open: boolean; onOpenChang
             </p>
             <div className="pt-2 border-t border-outline-variant/50">
               <p className="text-xs text-on-surface-variant">
-                Built with Electron, React, TypeScript, and better-sqlite3.
+                Built with Electron, React, TypeScript, and sql.js.
               </p>
               <p className="text-xs text-on-surface-variant mt-1">
                 MIT License &copy; {new Date().getFullYear()} shnwnw

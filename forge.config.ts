@@ -34,9 +34,6 @@ const config: ForgeConfig = {
       },
     } : {}),
   },
-  rebuildConfig: {
-    onlyModules: [],
-  },
   makers: [
     new MakerSquirrel({
       name: 'G-Notes',

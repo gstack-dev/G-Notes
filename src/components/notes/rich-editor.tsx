@@ -153,7 +153,7 @@ export function RichEditor() {
               });
             }
             hasChangesRef.current = false;
-          }).catch(() => {/* ignore */});
+          }).catch((err) => console.error("Failed to save editor state:", err));
         }, 800);
       },
       placeholder: "Start writing...",
@@ -199,7 +199,7 @@ export function RichEditor() {
           });
         }
         hasChangesRef.current = false;
-      }).catch(() => {/* ignore */});
+      }).catch((err) => console.error("Failed to save editor state:", err));
     }, 5000);
 
     return () => {
@@ -215,7 +215,7 @@ export function RichEditor() {
             content: JSON.stringify(data),
           });
         }
-      }).catch(() => {/* ignore */}).finally(() => {
+      }).catch((err) => console.error("Failed to save editor state:", err)).finally(() => {
         editor.destroy();
         editorRef.current = null;
       });

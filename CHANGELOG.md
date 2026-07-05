@@ -30,3 +30,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Electron fuses enabled (RunAsNode disabled, cookie encryption, ASAR integrity)
 - No telemetry, analytics, or network requests at startup
 - All data stored locally with no external dependencies
+
+## [Pre-release] — 2026-07-06
+
+### Fixed
+- TypeScript build: added missing `favorited`/`pinned` fields to test type definitions
+- Windows build: configured native module rebuild to skip N-API modules (onlyModules: [])
+- Windows Squirrel installer: converted app icon from PNG to ICO format, added macOS ICNS icon
+- CI: added multi-platform build workflow with lint, test, package, make, and e2e stages
+- CI: added automated release workflow triggered on version tags
+- Lint: resolved 69 warnings (unused imports, explicit any types, non-null assertions)
+- Error handling: added React ErrorBoundary component, logged silent catch handlers
+- Auto-backup: implemented periodic SQLite snapshot backups every 30 minutes
+
+### Changed
+- Upgraded TypeScript 4.5.5 → 5.7.3, @typescript-eslint 5.x → 7.x
+- Updated forge.config.ts icon config to extensionless path for cross-platform support
+- Added icon regeneration script (npm run generate-icons)
+- Updated README to fix broken icon paths and commented out missing screenshots

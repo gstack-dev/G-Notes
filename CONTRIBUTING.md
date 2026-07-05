@@ -22,7 +22,7 @@ Thanks for your interest in contributing!
 - React functional components with hooks.
 - Tailwind CSS v4 for styling.
 - EditorJS for rich text — keep plugins minimal and local.
-- SQLite via `better-sqlite3` in the main process only.
+- SQLite via `sql.js` (WASM-based) in the main process.
 - IPC for all renderer→main communication.
 
 ## Development Setup

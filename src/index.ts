@@ -1,5 +1,7 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
-import { getDb, createNote, createCategory, closeDb, setPref, getPref } from './database';
+import path from 'path';
+import fs from 'fs';
+import { initDb, getDb, createNote, createCategory, closeDb, setPref, getPref } from './database';
 import { registerIpcHandlers } from './ipc-handlers';
 import { runMigrations } from './database-migrations';
 
@@ -203,15 +205,16 @@ const createWindow = (): void => {
   });
 };
 
-app.on('ready', () => {
+app.on('ready', async () => {
+  await initDb();
   createWindow();
 
   if (app.isPackaged) {
     try {
       const { autoUpdater } = require('electron-updater'); // eslint-disable-line @typescript-eslint/no-var-requires
-      autoUpdater.checkForUpdatesAndNotify().catch(() => {/* ignore */});
+      autoUpdater.checkForUpdatesAndNotify().catch(() => {/* periodic check failures are expected offline */});
       setInterval(() => {
-        autoUpdater.checkForUpdatesAndNotify().catch(() => {/* ignore */});
+        autoUpdater.checkForUpdatesAndNotify().catch(() => {/* periodic check failures are expected offline */});
       }, 3600000);
 
       autoUpdater.on('update-downloaded', () => {
@@ -222,6 +225,19 @@ app.on('ready', () => {
         }
       });
     } catch (err) { console.error("Auto-updater error:", err); }
+
+    // Auto-backup every 30 minutes
+    setInterval(() => {
+      try {
+        const backupDir = path.join(app.getPath("userData"), "backups");
+        if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const backupPath = path.join(backupDir, `g-notes-backup-${timestamp}.db`);
+        fs.writeFileSync(backupPath, getDb().export());
+      } catch (err) {
+        console.error("Auto-backup failed:", err);
+      }
+    }, 1800000);
   }
 });
 

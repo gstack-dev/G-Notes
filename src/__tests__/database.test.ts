@@ -22,6 +22,7 @@ beforeEach(async () => {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gnotes-test-'));
   fs.mkdirSync(tmpDir, { recursive: true });
   dbModule = await import('../database');
+  await dbModule.initDb();
 });
 
 afterEach(() => {

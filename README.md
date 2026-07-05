@@ -45,12 +45,6 @@
 | **Windows** | `.exe` (NSIS installer) | [Latest release](https://github.com/gstack-dev/G-Notes/releases/latest) |
 | **Linux** | `.deb` / `.rpm` | [Latest release](https://github.com/gstack-dev/G-Notes/releases/latest) |
 
-Or install via homebrew (coming soon):
-
-```bash
-brew install shnwnw/tap/g-notes
-```
-
 ## Building from Source
 
 ```bash
@@ -80,7 +74,7 @@ npm start        # launches Electron with hot-reload
 
 - **Framework**: [Electron](https://www.electronjs.org/) + [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - **Editor**: [EditorJS](https://editorjs.io/) v2
-- **Database**: [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) with FTS5 full-text search
+- **Database**: [sql.js](https://github.com/kripken/sql.js/) (SQLite compiled to WASM) with FTS5 full-text search
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4
 - **State**: [Zustand](https://github.com/pmndrs/zustand)
 - **Packaging**: [Electron Forge](https://www.electronforge.io/) with Webpack

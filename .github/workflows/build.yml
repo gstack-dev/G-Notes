@@ -29,20 +29,6 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  test-e2e:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-      - name: Run e2e tests
-        run: xvfb-run --auto-servernum npm run test:e2e
-
   package:
     strategy:
       matrix:
@@ -61,3 +47,45 @@ jobs:
         with:
           name: app-${{ runner.os }}
           path: out/
+
+  make:
+    needs: [package]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Linux packaging deps
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y rpm
+
+      - run: npm ci
+      - run: npm run make
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributables-${{ runner.os }}
+          path: out/make/
+
+  test-e2e:
+    needs: [package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Build app for e2e
+        run: npm run package
+      - name: Run e2e tests
+        run: xvfb-run --auto-servernum npm run test:e2e

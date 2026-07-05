@@ -1,7 +1,7 @@
-import Database from "better-sqlite3";
 import { app } from "electron";
 import path from "path";
 import fs from "fs";
+import initSqlJs, { Database as SqlJsDatabase, SqlJsStatic, SqlValue } from "sql.js";
 
 const TRASH_DAYS = 30;
 
@@ -22,21 +22,27 @@ export interface CategoryRow {
   created_at: number;
 }
 
-let db: Database.Database | null = null;
+let SQL: SqlJsStatic | null = null;
+let db: SqlJsDatabase | null = null;
+let dbPath: string = "";
 
-export function getDb(): Database.Database {
-  if (db) return db;
-  const dbDir = app.getPath("userData");
+export async function initDb(customPath?: string): Promise<void> {
+  SQL = await initSqlJs();
+  if (customPath) {
+    dbPath = customPath;
+  } else {
+    dbPath = path.join(app.getPath("userData"), "g-notes.db");
+  }
+  const dbDir = path.dirname(dbPath);
   if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
-  const dbPath = path.join(dbDir, "g-notes.db");
-  db = new Database(dbPath);
-  db.pragma("journal_mode = WAL");
-  initializeSchema();
-  return db;
-}
-
-function initializeSchema(): void {
-  if (!db) return;
+  if (fs.existsSync(dbPath)) {
+    const buffer = fs.readFileSync(dbPath);
+    db = new SQL.Database(buffer);
+  } else {
+    db = new SQL.Database();
+  }
+  db.run("PRAGMA journal_mode = MEMORY");
+  db.run("PRAGMA busy_timeout = 5000");
   db.exec(`
     CREATE TABLE IF NOT EXISTS notes (
       id         TEXT PRIMARY KEY,
@@ -60,25 +66,102 @@ function initializeSchema(): void {
       value TEXT NOT NULL
     );
   `);
+  saveDb();
+}
+
+function saveDb(): void {
+  if (!db || !dbPath) return;
+  const data = db.export();
+  fs.writeFileSync(dbPath, Buffer.from(data));
+}
+
+export function getDb(): DbWrapper {
+  if (!db) throw new Error("Database not initialized. Call initDb() first.");
+  return new DbWrapper(db);
 }
 
 export function closeDb(): void {
   if (db) {
+    saveDb();
     db.close();
     db = null;
   }
 }
 
+class DbWrapper {
+  private _db: SqlJsDatabase;
+
+  constructor(_db: SqlJsDatabase) {
+    this._db = _db;
+  }
+
+  prepare(sql: string): PreparedStatement {
+    return new PreparedStatement(this._db, sql);
+  }
+
+  exec(sql: string): void {
+    this._db.exec(sql);
+    saveDb();
+  }
+
+  export(): Buffer {
+    return Buffer.from(this._db.export());
+  }
+}
+
+class PreparedStatement {
+  private _db: SqlJsDatabase;
+  private _sql: string;
+
+  constructor(_db: SqlJsDatabase, sql: string) {
+    this._db = _db;
+    this._sql = sql;
+  }
+
+  all(...params: SqlValue[]): Record<string, SqlValue>[] {
+    const stmt = this._db.prepare(this._sql);
+    if (params.length > 0) stmt.bind(params);
+    const rows: Record<string, SqlValue>[] = [];
+    while (stmt.step()) {
+      rows.push(stmt.getAsObject());
+    }
+    stmt.free();
+    return rows;
+  }
+
+  get(...params: SqlValue[]): Record<string, SqlValue> | undefined {
+    const stmt = this._db.prepare(this._sql);
+    if (params.length > 0) stmt.bind(params);
+    const row = stmt.step() ? stmt.getAsObject() : undefined;
+    stmt.free();
+    return row;
+  }
+
+  run(...params: SqlValue[]): { changes: number } {
+    if (params.length > 0) {
+      const stmt = this._db.prepare(this._sql);
+      stmt.bind(params);
+      stmt.run();
+      stmt.free();
+    } else {
+      this._db.run(this._sql);
+    }
+    const changes = this._db.getRowsModified();
+    saveDb();
+    return { changes };
+  }
+}
+
 export function getNotes(): NoteRow[] {
-  return (getDb().prepare("SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY pinned DESC, updated_at DESC").all() as NoteRow[]);
+  return getDb().prepare("SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY pinned DESC, updated_at DESC").all() as unknown as NoteRow[];
 }
 
 export function getAllNotes(): NoteRow[] {
-  return (getDb().prepare("SELECT * FROM notes ORDER BY updated_at DESC").all() as NoteRow[]);
+  return getDb().prepare("SELECT * FROM notes ORDER BY updated_at DESC").all() as unknown as NoteRow[];
 }
 
 export function getNote(id: string): NoteRow | undefined {
-  return getDb().prepare("SELECT * FROM notes WHERE id = ?").get(id) as NoteRow | undefined;
+  return getDb().prepare("SELECT * FROM notes WHERE id = ?").get(id) as unknown as NoteRow | undefined;
 }
 
 export function createNote(note: Omit<NoteRow, "favorited" | "pinned">): void {
@@ -89,7 +172,7 @@ export function createNote(note: Omit<NoteRow, "favorited" | "pinned">): void {
 
 export function updateNote(id: string, data: Partial<Pick<NoteRow, "title" | "content" | "tag" | "favorited" | "pinned">> & { deleted_at?: number | null }): void {
   const fields: string[] = [];
-  const values: (string | number | boolean | null)[] = [];
+  const values: (string | number | null)[] = [];
   if (data.title !== undefined) { fields.push("title = ?"); values.push(data.title); }
   if (data.content !== undefined) { fields.push("content = ?"); values.push(data.content); }
   if (data.tag !== undefined) { fields.push("tag = ?"); values.push(data.tag); }
@@ -116,7 +199,7 @@ export function permanentlyDeleteNote(id: string): void {
 }
 
 export function getTrashedNotes(): NoteRow[] {
-  return (getDb().prepare("SELECT * FROM notes WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC").all() as NoteRow[]);
+  return getDb().prepare("SELECT * FROM notes WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC").all() as unknown as NoteRow[];
 }
 
 export function cleanExpiredTrash(): number {
@@ -156,7 +239,7 @@ export function clearRecentSearches(): void {
 }
 
 export function getCategories(): CategoryRow[] {
-  return getDb().prepare("SELECT * FROM categories ORDER BY created_at ASC").all() as CategoryRow[];
+  return getDb().prepare("SELECT * FROM categories ORDER BY created_at ASC").all() as unknown as CategoryRow[];
 }
 
 export function createCategory(name: string, createdAt: number): void {
@@ -168,7 +251,7 @@ export function deleteCategory(name: string): void {
 }
 
 export function getPref(key: string): string | null {
-  const row = getDb().prepare("SELECT value FROM prefs WHERE key = ?").get(key) as { value: string } | undefined;
+  const row = getDb().prepare("SELECT value FROM prefs WHERE key = ?").get(key) as unknown as { value: string } | undefined;
   return row?.value ?? null;
 }
 
