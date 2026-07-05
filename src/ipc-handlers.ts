@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import {
   getNotes,
-  getAllNotes,
   getNote,
   createNote,
   updateNote,
@@ -33,12 +32,12 @@ export function registerIpcHandlers(): void {
     return rows.map(normalizeNote);
   });
 
-  ipcMain.handle("notes:get", (_event, id: string) => {
+  ipcMain.handle("notes:get", (_, id: string) => {
     const row = getNote(id);
     return row ? normalizeNote(row) : null;
   });
 
-  ipcMain.handle("notes:create", (_event, data: { id: string; title: string; content: string; tag: string; createdAt: number }) => {
+  ipcMain.handle("notes:create", (_, data: { id: string; title: string; content: string; tag: string; createdAt: number }) => {
     createNote({
       id: data.id,
       title: data.title,
@@ -51,21 +50,21 @@ export function registerIpcHandlers(): void {
     return { ...data, favorited: false, pinned: false, updatedAt: data.createdAt };
   });
 
-  ipcMain.handle("notes:update", (_event, id: string, data: Record<string, any>) => {
-    const dbData: Record<string, any> = {};
+  ipcMain.handle("notes:update", (_, id: string, data: Record<string, unknown>) => {
+    const dbData: Record<string, unknown> = {};
     if (data.title !== undefined) dbData.title = data.title;
     if (data.content !== undefined) dbData.content = data.content;
     if (data.tag !== undefined) dbData.tag = data.tag;
     if (data.favorited !== undefined) dbData.favorited = data.favorited ? 1 : 0;
     if (data.pinned !== undefined) dbData.pinned = data.pinned ? 1 : 0;
-    updateNote(id, dbData as any);
+    updateNote(id, dbData);
   });
 
-  ipcMain.handle("notes:delete", (_event, id: string) => softDeleteNote(id));
+  ipcMain.handle("notes:delete", (_, id: string) => softDeleteNote(id));
 
-  ipcMain.handle("notes:permanently-delete", (_event, id: string) => permanentlyDeleteNote(id));
+  ipcMain.handle("notes:permanently-delete", (_, id: string) => permanentlyDeleteNote(id));
 
-  ipcMain.handle("notes:restore", (_event, id: string) => restoreNote(id));
+  ipcMain.handle("notes:restore", (_, id: string) => restoreNote(id));
 
   ipcMain.handle("notes:trash", () => {
     const rows = getTrashedNotes();
@@ -77,19 +76,19 @@ export function registerIpcHandlers(): void {
     for (const r of rows) permanentlyDeleteNote(r.id);
   });
 
-  ipcMain.handle("notes:delete-by-tag", (_event, tag: string) => deleteNotesByTag(tag));
+  ipcMain.handle("notes:delete-by-tag", (_, tag: string) => deleteNotesByTag(tag));
 
-  ipcMain.handle("notes:toggle-favorite", (_event, id: string) => {
+  ipcMain.handle("notes:toggle-favorite", (_, id: string) => {
     const note = getNote(id);
     if (note) updateNote(id, { favorited: note.favorited ? 0 : 1 });
   });
 
-  ipcMain.handle("notes:toggle-pin", (_event, id: string) => {
+  ipcMain.handle("notes:toggle-pin", (_, id: string) => {
     const note = getNote(id);
     if (note) updateNote(id, { pinned: note.pinned ? 0 : 1 });
   });
 
-  ipcMain.handle("notes:search", (_event, query: string) => {
+  ipcMain.handle("notes:search", (_, query: string) => {
     addRecentSearch(query);
     return fullTextSearch(query);
   });
@@ -102,17 +101,17 @@ export function registerIpcHandlers(): void {
     return getCategories().map((r) => ({ name: r.name, createdAt: r.created_at }));
   });
 
-  ipcMain.handle("categories:create", (_event, name: string, createdAt: number) => createCategory(name, createdAt));
+  ipcMain.handle("categories:create", (_, name: string, createdAt: number) => createCategory(name, createdAt));
 
-  ipcMain.handle("categories:delete", (_event, name: string) => deleteCategory(name));
+  ipcMain.handle("categories:delete", (_, name: string) => deleteCategory(name));
 
-  ipcMain.handle("shell:open-external", (_event, url: string) => shell.openExternal(url));
+  ipcMain.handle("shell:open-external", (_, url: string) => shell.openExternal(url));
 
-  ipcMain.handle("prefs:get", (_event, key: string) => getPref(key));
+  ipcMain.handle("prefs:get", (_, key: string) => getPref(key));
 
-  ipcMain.handle("prefs:set", (_event, key: string, value: string) => { setPref(key, value); });
+  ipcMain.handle("prefs:set", (_, key: string, value: string) => { setPref(key, value); });
 
-  ipcMain.handle("app:export-notes", async (_event) => {
+  ipcMain.handle("app:export-notes", async () => {
     const win = BrowserWindow.getFocusedWindow();
     if (!win) return;
     const result = await dialog.showSaveDialog(win, {
@@ -127,7 +126,7 @@ export function registerIpcHandlers(): void {
     fs.writeFileSync(result.filePath, data, "utf-8");
   });
 
-  ipcMain.handle("app:export-markdown", async (_event) => {
+  ipcMain.handle("app:export-markdown", async () => {
     const win = BrowserWindow.getFocusedWindow();
     if (!win) return;
     const result = await dialog.showSaveDialog(win, {
@@ -168,7 +167,7 @@ export function registerIpcHandlers(): void {
     fs.writeFileSync(result.filePath, lines.join("\n"), "utf-8");
   });
 
-  ipcMain.handle("app:import-notes", async (_event) => {
+  ipcMain.handle("app:import-notes", async () => {
     const win = BrowserWindow.getFocusedWindow();
     if (!win) return;
     const result = await dialog.showOpenDialog(win, {
@@ -201,7 +200,7 @@ export function registerIpcHandlers(): void {
     return backupPath;
   });
 
-  ipcMain.handle("app:save-image", async (_event, dataUrl: string) => {
+  ipcMain.handle("app:save-image", async (_, dataUrl: string) => {
     const matches = dataUrl.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
     if (!matches) throw new Error("Invalid image data");
     const ext = matches[1] === "jpeg" ? "jpg" : matches[1];
@@ -212,7 +211,7 @@ export function registerIpcHandlers(): void {
     return name;
   });
 
-  ipcMain.handle("app:get-image-path", (_event, name: string) => {
+  ipcMain.handle("app:get-image-path", (_, name: string) => {
     const imgPath = path.join(getImagesDir(), name);
     if (!fs.existsSync(imgPath)) throw new Error("Image not found");
     return imgPath;

@@ -17,6 +17,22 @@ const config: ForgeConfig = {
     icon: './screen',
     name: 'G-Notes',
     executableName: 'g-notes',
+    ...(process.env.CSC_LINK ? {
+      certificateFile: process.env.CSC_LINK,
+      certificatePassword: process.env.CSC_KEY_PASSWORD,
+    } : {}),
+    ...(process.env.APPLE_IDENTITY && process.env.APPLE_ID && process.env.APPLE_ID_PASSWORD ? {
+      osxSign: {
+        identity: process.env.APPLE_IDENTITY,
+        hardenedRuntime: true,
+        gatekeeperAssess: false,
+      },
+      osxNotarize: {
+        appleId: process.env.APPLE_ID,
+        appleIdPassword: process.env.APPLE_ID_PASSWORD,
+        teamId: process.env.APPLE_TEAM_ID,
+      },
+    } : {}),
   },
   rebuildConfig: {
     onlyModules: [],
@@ -25,6 +41,9 @@ const config: ForgeConfig = {
     new MakerSquirrel({
       name: 'G-Notes',
       setupIcon: './screen.ico',
+      ...(process.env.CSC_LINK ? {
+        signWithParams: `/a /fd SHA256 /f "${process.env.CSC_LINK}" /p "${process.env.CSC_KEY_PASSWORD}" /tr http://timestamp.digicert.com /td SHA256`,
+      } : {}),
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({

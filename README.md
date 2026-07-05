@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="icons/256x256.png" width="96" height="96" alt="G-Notes logo" />
+  <img src="screen.png" width="96" height="96" alt="G-Notes logo" />
   <h1 align="center">G-Notes</h1>
   <p align="center">
     A private, offline-first notes app powered by SQLite and EditorJS.
@@ -22,7 +22,7 @@
 
 <br />
 
-![Dashboard screenshot](screenshots/dashboard.png)
+<!-- Screenshots: add screenshots/dashboard.png to the repo to enable -->
 
 ## Features
 
@@ -66,7 +66,7 @@ For development:
 npm start        # launches Electron with hot-reload
 ```
 
-## Screenshots
+<!-- ## Screenshots
 
 | Dashboard | Editor | Categories | Search |
 |-----------|--------|------------|--------|
@@ -74,7 +74,7 @@ npm start        # launches Electron with hot-reload
 
 | Settings | Export | Notes | Favorites |
 |----------|--------|-------|-----------|
-| ![Settings](screenshots/settings.png) | ![Export](screenshots/export.png) | ![Notes](screenshots/notes.png) | ![Favorites](screenshots/favorites.png) |
+| ![Settings](screenshots/settings.png) | ![Export](screenshots/export.png) | ![Notes](screenshots/notes.png) | ![Favorites](screenshots/favorites.png) -->
 
 ## Tech Stack
 

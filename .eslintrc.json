@@ -13,11 +13,16 @@
     "plugin:import/typescript"
   ],
   "parser": "@typescript-eslint/parser",
+  "ignorePatterns": ["node_modules/", ".webpack/", "out/"],
   "settings": {
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true
       }
     }
+  },
+  "rules": {
+    "import/no-named-as-default-member": "off",
+    "import/no-named-as-default": "off"
   }
 }

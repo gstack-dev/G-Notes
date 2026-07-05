@@ -3,14 +3,14 @@ const { contextBridge, ipcRenderer } = require("electron"); // eslint-disable-li
 contextBridge.exposeInMainWorld("electronAPI", {
   openExternal: (url: string) => ipcRenderer.invoke("shell:open-external", url),
 
-  on: (channel: string, callback: (...args: any[]) => void) => {
+  on: (channel: string, callback: (...args: unknown[]) => void) => {
     const validChannels = ["menu:new-note", "menu:export-notes", "menu:import-notes", "menu:settings", "menu:about", "menu:search", "menu:navigate", "menu:trash", "menu:export-markdown"];
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (_event: any, ...args: any[]) => callback(...args));
+      ipcRenderer.on(channel, (_event: unknown, ...args: unknown[]) => callback(...args));
     }
   },
 
-  removeListener: (channel: string, callback: (...args: any[]) => void) => {
+  removeListener: (channel: string, callback: (...args: unknown[]) => void) => {
     ipcRenderer.removeListener(channel, callback);
   },
 
@@ -19,7 +19,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     get: (id: string) => ipcRenderer.invoke("notes:get", id),
     create: (data: { id: string; title: string; content: string; tag: string; createdAt: number }) =>
       ipcRenderer.invoke("notes:create", data),
-    update: (id: string, data: Record<string, any>) =>
+    update: (id: string, data: Record<string, unknown>) =>
       ipcRenderer.invoke("notes:update", id, data),
     delete: (id: string) => ipcRenderer.invoke("notes:delete", id),
     permanentlyDelete: (id: string) => ipcRenderer.invoke("notes:permanently-delete", id),

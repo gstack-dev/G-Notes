@@ -28,7 +28,7 @@ interface NotesState {
   togglePin: (id: string) => void;
 }
 
-export const useNotesStore = create<NotesState>()((set, get) => ({
+export const useNotesStore = create<NotesState>()((set) => ({
   notes: [],
   activeNoteId: null,
   initialized: false,
@@ -113,9 +113,9 @@ export function getTextExcerpt(content: string, maxLen = 120): string {
     const parsed = JSON.parse(content);
     if (parsed && parsed.blocks && Array.isArray(parsed.blocks)) {
       const texts = parsed.blocks
-        .map((b: any) => {
+        .map((b: { data?: { text?: string; items?: { content?: string }[] } }) => {
           if (b.data?.text) return b.data.text.replace(/<[^>]*>/g, "");
-          if (b.data?.items) return b.data.items.map((i: any) => (i.content || "").replace(/<[^>]*>/g, "")).join(" ");
+          if (b.data?.items) return b.data.items.map((i) => (i.content || "").replace(/<[^>]*>/g, "")).join(" ");
           return "";
         })
         .filter(Boolean);

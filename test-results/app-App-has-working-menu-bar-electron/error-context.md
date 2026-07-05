@@ -6,11 +6,11 @@
 
 # Test info
 
-- Name: smoke.spec.ts >> G-Notes Smoke Tests >> app has the correct version in package.json
-- Location: e2e/smoke.spec.ts:27:7
+- Name: app.spec.ts >> App >> has working menu bar
+- Location: e2e/app.spec.ts:22:7
 
 # Error details
 
 ```
-Error: Channel closed
+Error: Process failed to launch!
 ```

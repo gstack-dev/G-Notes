@@ -1,6 +1,7 @@
 import { vi, beforeAll } from 'vitest';
 
 beforeAll(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any).window = {
     electronAPI: {
       openExternal: vi.fn(),

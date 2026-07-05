@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: smoke.spec.ts >> G-Notes Smoke Tests >> app launches and shows main window
-- Location: e2e/smoke.spec.ts:9:7
+- Name: smoke.spec.ts >> G-Notes Smoke Tests >> app has correct version
+- Location: e2e/smoke.spec.ts:23:7
 
 # Error details
 
@@ -32,8 +32,7 @@ Call log:
   7  | 
   8  | test.describe('G-Notes Smoke Tests', () => {
   9  |   test('app launches and shows main window', async () => {
-> 10 |     const electronApp = await electron.launch({
-     |                         ^ Error: electron.launch: Failed to launch: Error: spawn /media/shnwnw/Workspace/projects/work/G-Notes/node_modules/electron/dist/electron ENOENT
+  10 |     const electronApp = await electron.launch({
   11 |       args: [APP_PATH],
   12 |       executablePath: ELECTRON_PATH,
   13 |     });
@@ -47,7 +46,8 @@ Call log:
   21 |   });
   22 | 
   23 |   test('app has correct version', async () => {
-  24 |     const electronApp = await electron.launch({
+> 24 |     const electronApp = await electron.launch({
+     |                         ^ Error: electron.launch: Failed to launch: Error: spawn /media/shnwnw/Workspace/projects/work/G-Notes/node_modules/electron/dist/electron ENOENT
   25 |       args: [APP_PATH],
   26 |       executablePath: ELECTRON_PATH,
   27 |     });

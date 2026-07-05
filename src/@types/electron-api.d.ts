@@ -17,13 +17,13 @@ interface SearchResult {
 
 interface ElectronAPI {
   openExternal: (url: string) => Promise<void>;
-  on: (channel: string, callback: (...args: any[]) => void) => void;
-  removeListener: (channel: string, callback: (...args: any[]) => void) => void;
+  on: (channel: string, callback: (...args: unknown[]) => void) => void;
+  removeListener: (channel: string, callback: (...args: unknown[]) => void) => void;
   notes: {
     list: () => Promise<NoteAPI[]>;
     get: (id: string) => Promise<NoteAPI | null>;
     create: (data: { id: string; title: string; content: string; tag: string; createdAt: number }) => Promise<NoteAPI>;
-    update: (id: string, data: Record<string, any>) => Promise<void>;
+    update: (id: string, data: Record<string, unknown>) => Promise<void>;
     delete: (id: string) => Promise<void>;
     permanentlyDelete: (id: string) => Promise<void>;
     restore: (id: string) => Promise<void>;

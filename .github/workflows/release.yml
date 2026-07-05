@@ -1,63 +1,75 @@
-name: Build and Release
+name: Release
 
 on:
   push:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
-  release:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-
+  test:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  make:
+    needs: [test]
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux
+          - os: macos-latest
+            target: macos
+          - os: windows-latest
+            target: windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Linux packaging deps
+        if: matrix.target == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y rpm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run lint
-
-      - name: Test
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run test
-
-      - name: Make
+      - name: Make distributables
         run: npm run make
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: g-notes-${{ matrix.os }}
-          path: out/make/**/*
+          name: distributables-${{ matrix.target }}
+          path: out/make/
 
-  create-release:
-    needs: release
+  publish:
+    needs: [make]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
+      - uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            g-notes-ubuntu-latest/**/*
-            g-notes-macos-latest/**/*
-            g-notes-windows-latest/**/*
+          files: artifacts/**/*
           draft: true
-          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+          prerelease: false
           generate_release_notes: true

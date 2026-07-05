@@ -89,7 +89,7 @@ export function createNote(note: Omit<NoteRow, "favorited" | "pinned">): void {
 
 export function updateNote(id: string, data: Partial<Pick<NoteRow, "title" | "content" | "tag" | "favorited" | "pinned">> & { deleted_at?: number | null }): void {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number | boolean | null)[] = [];
   if (data.title !== undefined) { fields.push("title = ?"); values.push(data.title); }
   if (data.content !== undefined) { fields.push("content = ?"); values.push(data.content); }
   if (data.tag !== undefined) { fields.push("tag = ?"); values.push(data.tag); }

@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import { usePageStore } from "@/shared/page-store";
-import { useNotesStore } from "@/shared/zust-store";
+import { usePageStore, type Page } from "@/shared/page-store";
 
 export function useMenuHandlers(setDialog: (key: string, open: boolean) => void) {
   useEffect(() => {
     const api = window.electronAPI;
     if (!api) return;
 
-    const handlers: Record<string, (...args: any[]) => void> = {
+    const handlers: Record<string, (...args: unknown[]) => void> = {
       "menu:new-note": () => setDialog("newNote", true),
       "menu:export-notes": () => setDialog("exportImport", true),
       "menu:import-notes": () => setDialog("exportImport", true),
@@ -18,7 +17,7 @@ export function useMenuHandlers(setDialog: (key: string, open: boolean) => void)
         searchInput?.focus();
       },
       "menu:navigate": (page: string) => {
-        usePageStore.getState().setActivePage(page as any);
+        usePageStore.getState().setActivePage(page as Page);
       },
     };
 
