@@ -31,7 +31,7 @@ afterEach(() => {
 
 const sampleNote: {
   id: string; title: string; content: string; tag: string;
-  created_at: number; updated_at: number; deleted_at: null;
+  created_at: number; updated_at: number; favorited: number; pinned: number; deleted_at: null;
 } = {
   id: 'note-1',
   title: 'Test Note',
@@ -39,6 +39,8 @@ const sampleNote: {
   tag: 'General',
   created_at: Date.now(),
   updated_at: Date.now(),
+  favorited: 0,
+  pinned: 0,
   deleted_at: null,
 };
 
