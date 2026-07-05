@@ -221,7 +221,7 @@ export function registerIpcHandlers(): void {
   ipcMain.handle("app:get-version", () => app.getVersion());
 
   ipcMain.handle("app:open-feedback", () => {
-    shell.openExternal("https://github.com/shnwnw/g-issues/issues/new?template=bug-report.yml");
+    shell.openExternal("https://github.com/gstack-dev/G-Notes/issues/new?template=bug-report.yml");
   });
 
   ipcMain.handle("app:clean-expired-trash", () => {

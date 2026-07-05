@@ -29,14 +29,14 @@ const config: ForgeConfig = {
       options: {
         name: 'g-notes',
         productName: 'G-Notes',
-        homepage: 'https://github.com/shnwnw/g-notes',
+        homepage: 'https://github.com/gstack-dev/G-Notes',
       },
     }),
     new MakerDeb({
       options: {
         name: 'g-notes',
         productName: 'G-Notes',
-        homepage: 'https://github.com/shnwnw/g-notes',
+        homepage: 'https://github.com/gstack-dev/G-Notes',
       },
     }),
   ],
@@ -45,7 +45,7 @@ const config: ForgeConfig = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'shnwnw',
+          owner: 'gstack-dev',
           name: 'g-notes',
         },
         draft: true,

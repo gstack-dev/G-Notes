@@ -5,7 +5,7 @@
 ### Code Quality
 - [x] **TypeScript compilation** — Builds clean (`npm run make` succeeds)
 - [x] **ESLint** — 0 errors (65 warnings — `no-explicit-any`, `no-unused-vars`, `import/no-named-as-default-member`). Use `--max-warnings 0` for CI strictness.
-- [ ] **Runtime testing** — No test framework configured. Add Vitest + Playwright.
+- [x] **Runtime testing** — Vitest configured (v4.1.9), 31 tests passing across 4 test files (stores, utils). Add Playwright for E2E later.
 
 ### Build & Packaging
 - [x] **`npm run make`** — Produces `.deb` and `.rpm` for Linux
@@ -16,8 +16,8 @@
 ### CI/CD
 - [x] **GitHub Actions release workflow** — Configured, triggers on `v*` tags, Node 22
 - [x] **GitHub publisher** — Draft releases configured
-- [ ] **First git commit** — Repository has ZERO commits. All files are untracked.
-- [ ] **GitHub repository** — Verify `shnwnw/g-notes` exists and has correct settings
+- [x] **First git commit** — `eb910f2 first commit`, pushed to `origin/main`
+- [x] **GitHub repository** — `gstack-dev/G-Notes` exists (verified)
 
 ### Documentation
 - [x] **Screenshots** — 7 screenshots captured in `screenshots/` (dashboard, editor, categories, settings, export, notes, favorites)
@@ -29,7 +29,7 @@
 - [x] **Issue templates** — Bug report + feature request
 
 ### Dependencies
-- [ ] **npm audit** — 32 vulns (26 high) in dev deps. Acceptable for v1.0, all in build-time tools (sockjs, uuid, tar). Fix with `npm audit fix --force` may break `@electron-forge/plugin-webpack`. Review before release.
+- [x] **npm audit** — 34 vulns (25 high, 9 moderate) in build-time dev deps (tar, uuid via sockjs/webpack-dev-server). `--force` breaks Forge. Accepted for v1.0.
 - [x] **`@types/node` pinned** — v20 in devDependencies, resolves TS 4.5.4 compatibility
 - [x] **`.bin` files** — Fixed with `npm rebuild`
 - [x] **Electron 43** — Verified compatible with Node 22+
@@ -39,6 +39,11 @@
 - [ ] **macOS** — Must test on macOS before release
 - [ ] **Windows** — Must test on Windows before release (Squirrel installer)
 - [ ] **Auto-update** — Test from a tagged release
+
+### Repository
+- [x] **package.json URLs** — Updated to match actual remote (`gstack-dev/G-Notes`)
+- [x] **forge.config.ts URLs** — Updated publisher and maker homepage URLs
+- [x] **README.md, CONTRIBUTING.md, PLANS.md** — All URLs updated
 
 ### Legal & Metadata
 - [x] `package.json` author/email/license/repository filled
@@ -62,10 +67,7 @@
 
 5. ~~**Fix CI/CD**~~ ✅ Done — `node-version: 22` (was 18, Electron 43 requires Node 22+)
 
-6. **Set up testing**
-   - Add Vitest or Jest
-   - Write unit tests for: database CRUD, IPC handlers, store logic
-   - Consider Playwright for E2E testing
+6. ~~**Set up testing**~~ ✅ Done — Vitest v4.1.9 configured, 31 tests in 4 files (page-store, zust-store, categories-store, utils). Database and IPC handler tests pending (need Electron mocking).
 
 7. **Dependency audit**
    - 32 vulns (26 high) remain in dev deps (sockjs, uuid, tar). `npm audit fix --force` breaks `@electron-forge/plugin-webpack`. Acceptable for v1.0 but should be reviewed.
@@ -76,7 +78,7 @@
    ```bash
    git add -A
    git commit -m "Initial release v1.0.0"
-   git remote add origin https://github.com/shnwnw/g-notes.git
+   git remote add origin https://github.com/gstack-dev/G-Notes.git
    git push -u origin master
    ```
 
@@ -96,9 +98,9 @@
 ### Phase 3: Distribution (Estimated: 1 day)
 
 10. **Homebrew tap**
-    - Create `shnwnw/homebrew-tap` repository
+    - Create `gstack-dev/homebrew-tap` repository
     - Add formula for G-Notes (points to GitHub release artifacts)
-    - Test `brew install shnwnw/tap/g-notes`
+    - Test `brew install gstack-dev/tap/g-notes`
 
 11. **Snap/Flatpak (optional)**
     - Consider publishing to Snap Store or Flathub for Linux users

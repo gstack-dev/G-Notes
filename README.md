@@ -41,9 +41,9 @@
 
 | Platform | Package | Download |
 |----------|---------|----------|
-| **macOS** | `.zip` | [Latest release](https://github.com/shnwnw/g-notes/releases/latest) |
-| **Windows** | `.exe` (NSIS installer) | [Latest release](https://github.com/shnwnw/g-notes/releases/latest) |
-| **Linux** | `.deb` / `.rpm` | [Latest release](https://github.com/shnwnw/g-notes/releases/latest) |
+| **macOS** | `.zip` | [Latest release](https://github.com/gstack-dev/G-Notes/releases/latest) |
+| **Windows** | `.exe` (NSIS installer) | [Latest release](https://github.com/gstack-dev/G-Notes/releases/latest) |
+| **Linux** | `.deb` / `.rpm` | [Latest release](https://github.com/gstack-dev/G-Notes/releases/latest) |
 
 Or install via homebrew (coming soon):
 
@@ -54,7 +54,7 @@ brew install shnwnw/tap/g-notes
 ## Building from Source
 
 ```bash
-git clone https://github.com/shnwnw/g-notes.git
+git clone https://github.com/gstack-dev/G-Notes.git
 cd g-notes
 npm install
 npm run make     # produces distributables in out/make/
@@ -121,7 +121,7 @@ See [PRIVACY.md](PRIVACY.md) for details.
 
 ```bash
 # Clone
-git clone https://github.com/shnwnw/g-notes.git
+git clone https://github.com/gstack-dev/G-Notes.git
 cd g-notes
 
 # Install

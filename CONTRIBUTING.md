@@ -28,7 +28,7 @@ Thanks for your interest in contributing!
 ## Development Setup
 
 ```bash
-git clone https://github.com/shnwnw/g-notes.git
+git clone https://github.com/gstack-dev/G-Notes.git
 cd g-notes
 npm install
 npm start        # dev mode with hot reload
