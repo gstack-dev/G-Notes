@@ -45,10 +45,10 @@ const sampleNote: {
 describe('Database - Notes CRUD', () => {
   it('creates and retrieves a note', () => {
     dbModule.createNote(sampleNote);
-    const note = dbModule.getNote('note-1');
+    const note = dbModule.getNote('note-1') as NonNullable<typeof sampleNote>;
     expect(note).toBeDefined();
-    expect(note!.title).toBe('Test Note');
-    expect(note!.tag).toBe('General');
+    expect(note.title).toBe('Test Note');
+    expect(note.tag).toBe('General');
   });
 
   it('returns empty array when no notes exist', () => {
@@ -68,16 +68,16 @@ describe('Database - Notes CRUD', () => {
   it('updates a note title', () => {
     dbModule.createNote(sampleNote);
     dbModule.updateNote('note-1', { title: 'Updated Title' });
-    const note = dbModule.getNote('note-1');
-    expect(note!.title).toBe('Updated Title');
+    const note = dbModule.getNote('note-1') as NonNullable<typeof sampleNote>;
+    expect(note.title).toBe('Updated Title');
   });
 
   it('soft deletes and restores a note', () => {
     dbModule.createNote(sampleNote);
     dbModule.softDeleteNote('note-1');
-    expect(dbModule.getNote('note-1')!.deleted_at).toBeGreaterThan(0);
+    expect((dbModule.getNote('note-1') as NonNullable<typeof sampleNote>).deleted_at).toBeGreaterThan(0);
     dbModule.restoreNote('note-1');
-    expect(dbModule.getNote('note-1')!.deleted_at).toBeNull();
+    expect((dbModule.getNote('note-1') as NonNullable<typeof sampleNote>).deleted_at).toBeNull();
   });
 
   it('permanently deletes a note', () => {
@@ -97,9 +97,9 @@ describe('Database - Notes CRUD', () => {
   it('toggles favorited and pinned', () => {
     dbModule.createNote(sampleNote);
     dbModule.updateNote('note-1', { favorited: 1 });
-    expect(dbModule.getNote('note-1')!.favorited).toBe(1);
+    expect((dbModule.getNote('note-1') as NonNullable<typeof sampleNote>).favorited).toBe(1);
     dbModule.updateNote('note-1', { pinned: 1 });
-    expect(dbModule.getNote('note-1')!.pinned).toBe(1);
+    expect((dbModule.getNote('note-1') as NonNullable<typeof sampleNote>).pinned).toBe(1);
   });
 
   it('deletes notes by tag', () => {

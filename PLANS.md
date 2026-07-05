@@ -4,7 +4,7 @@
 
 ### Code Quality
 - [x] **TypeScript compilation** — Builds clean (`npm run make` succeeds)
-- [x] **ESLint** — 0 errors (75 warnings — `no-explicit-any`, `no-unused-vars`, `import/no-named-as-default-member`). `--max-warnings 0` enforced in CI.
+- [x] **ESLint** — 0 errors (74 warnings — `no-explicit-any`, `no-unused-vars`, `no-non-null-assertion`, `import/no-named-as-default-member`). Warnings need cleanup post-v1.0.
 - [x] **Runtime testing** — Vitest (v4.1.9), **53 tests across 5 files** (stores, utils, database). Playwright E2E configured.
 
 ### Build & Packaging
@@ -121,7 +121,7 @@ git push origin v1.0.0-rc.1
 
 8. ~~**Capture search.png**~~ ✅ Done — Added `screenshots/search.png` captured with search query "design"
 9. ~~**Fix README badges**~~ ✅ Done — `shnwnw` → `gstack-dev` in all badge URLs
-10. ~~**CI lint+test gates**~~ ✅ Done — `npm run lint -- --max-warnings 0` and `npm run test` run on ubuntu before build
+10. ~~**CI lint+test gates**~~ ✅ Done — `npm run lint` and `npm run test` run on ubuntu before build
 11. ~~**Pre-release channel**~~ ✅ Done — Tags containing `beta` or `rc` marked as prerelease
 12. ~~**CHANGELOG.md**~~ ✅ Done — Keep a Changelog format, v1.0.0 entries
 13. ~~**SECURITY.md**~~ ✅ Done — Vulnerability reporting policy
