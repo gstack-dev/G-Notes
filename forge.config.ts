@@ -14,7 +14,7 @@ import { rendererConfig } from './webpack.renderer.config';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    icon: './screen.png',
+    icon: './screen',
     name: 'G-Notes',
     executableName: 'g-notes',
   },
@@ -24,7 +24,7 @@ const config: ForgeConfig = {
   makers: [
     new MakerSquirrel({
       name: 'G-Notes',
-      setupIcon: './screen.png',
+      setupIcon: './screen.ico',
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({
