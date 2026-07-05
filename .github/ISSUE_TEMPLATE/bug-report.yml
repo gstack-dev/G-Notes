@@ -1,0 +1,30 @@
+---
+name: Bug report
+about: Create a report to help improve G-Notes
+title: '[Bug] '
+labels: bug
+assignees: ''
+---
+
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+1. Open G-Notes
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
+
+**Expected behavior**
+What you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots.
+
+**System info (please complete):**
+- OS: [e.g. macOS 14, Windows 11, Ubuntu 24.04]
+- G-Notes version: [e.g. 1.0.0]
+- Installation method: [e.g. .deb, .exe, built from source]
+
+**Additional context**
+Add any other context about the problem here.
