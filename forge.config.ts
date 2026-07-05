@@ -18,7 +18,9 @@ const config: ForgeConfig = {
     name: 'G-Notes',
     executableName: 'g-notes',
   },
-  rebuildConfig: {},
+  rebuildConfig: {
+    onlyModules: [],
+  },
   makers: [
     new MakerSquirrel({
       name: 'G-Notes',
