@@ -54,7 +54,7 @@ async function migrateFromLocalStorage(mainWindow: BrowserWindow): Promise<void>
         true
       );
     }
-  } catch {/* ignore */}
+  } catch (err) { console.error("Failed to migrate from localStorage:", err); }
 }
 
 function buildMenu(): void {
@@ -221,7 +221,7 @@ app.on('ready', () => {
           setPref('last_version', version);
         }
       });
-    } catch {/* ignore */}
+    } catch (err) { console.error("Auto-updater error:", err); }
   }
 });
 

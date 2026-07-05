@@ -15,8 +15,8 @@
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey" alt="Platforms" />
-    <img src="https://img.shields.io/github/v/release/shnwnw/g-notes?include_prereleases&label=version" alt="Version" />
-    <img src="https://img.shields.io/github/license/shnwnw/g-notes" alt="License" />
+    <img src="https://img.shields.io/github/v/release/gstack-dev/g-notes?include_prereleases&label=version" alt="Version" />
+    <img src="https://img.shields.io/github/license/gstack-dev/g-notes" alt="License" />
   </p>
 </div>
 
@@ -68,13 +68,13 @@ npm start        # launches Electron with hot-reload
 
 ## Screenshots
 
-| Dashboard | Editor | Categories |
-|-----------|--------|------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Editor](screenshots/editor.png) | ![Categories](screenshots/categories.png) |
+| Dashboard | Editor | Categories | Search |
+|-----------|--------|------------|--------|
+| ![Dashboard](screenshots/dashboard.png) | ![Editor](screenshots/editor.png) | ![Categories](screenshots/categories.png) | ![Search](screenshots/search.png) |
 
-| Settings | Export | Notes |
-|----------|--------|-------|
-| ![Settings](screenshots/settings.png) | ![Export](screenshots/export.png) | ![Notes](screenshots/notes.png) |
+| Settings | Export | Notes | Favorites |
+|----------|--------|-------|-----------|
+| ![Settings](screenshots/settings.png) | ![Export](screenshots/export.png) | ![Notes](screenshots/notes.png) | ![Favorites](screenshots/favorites.png) |
 
 ## Tech Stack
 

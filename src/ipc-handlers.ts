@@ -162,7 +162,7 @@ export function registerIpcHandlers(): void {
             }
           }
         }
-      } catch {/* ignore */}
+      } catch (err) { console.error("Failed to export block:", err); }
       lines.push("\n---\n");
     }
     fs.writeFileSync(result.filePath, lines.join("\n"), "utf-8");
@@ -181,12 +181,12 @@ export function registerIpcHandlers(): void {
     const data = JSON.parse(raw);
     if (data.notes) {
       for (const n of data.notes) {
-        try { createNote({ id: n.id, title: n.title || "Untitled", content: n.content || "{}", tag: n.tag || "General", created_at: n.createdAt || Date.now(), updated_at: n.updatedAt || Date.now(), deleted_at: null }); } catch {/* ignore */}
+        try { createNote({ id: n.id, title: n.title || "Untitled", content: n.content || "{}", tag: n.tag || "General", created_at: n.createdAt || Date.now(), updated_at: n.updatedAt || Date.now(), deleted_at: null }); } catch (err) { console.error("Failed to import note:", err); }
       }
     }
     if (data.categories) {
       for (const c of data.categories) {
-        try { createCategory(c.name, c.createdAt || Date.now()); } catch {/* ignore */}
+        try { createCategory(c.name, c.createdAt || Date.now()); } catch (err) { console.error("Failed to import category:", err); }
       }
     }
   });

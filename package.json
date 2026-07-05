@@ -12,7 +12,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "keywords": [
     "notes",
@@ -45,6 +46,7 @@
     "@electron-forge/plugin-webpack": "^7.6.1",
     "@electron-forge/publisher-github": "^7.6.1",
     "@electron/fuses": "^1.8.0",
+    "@playwright/test": "^1.61.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.19.43",
     "@types/react": "^19.2.17",

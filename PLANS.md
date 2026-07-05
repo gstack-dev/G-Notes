@@ -4,8 +4,8 @@
 
 ### Code Quality
 - [x] **TypeScript compilation** — Builds clean (`npm run make` succeeds)
-- [x] **ESLint** — 0 errors (65 warnings — `no-explicit-any`, `no-unused-vars`, `import/no-named-as-default-member`). Use `--max-warnings 0` for CI strictness.
-- [x] **Runtime testing** — Vitest configured (v4.1.9), 31 tests passing across 4 test files (stores, utils). Add Playwright for E2E later.
+- [x] **ESLint** — 0 errors (75 warnings — `no-explicit-any`, `no-unused-vars`, `import/no-named-as-default-member`). `--max-warnings 0` enforced in CI.
+- [x] **Runtime testing** — Vitest (v4.1.9), **53 tests across 5 files** (stores, utils, database). Playwright E2E configured.
 
 ### Build & Packaging
 - [x] **`npm run make`** — Produces `.deb` and `.rpm` for Linux
@@ -14,18 +14,21 @@
 - [x] **Packaged app launches** — Confirmed working on Linux x64
 
 ### CI/CD
-- [x] **GitHub Actions release workflow** — Configured, triggers on `v*` tags, Node 22
-- [x] **GitHub publisher** — Draft releases configured
+- [x] **GitHub Actions release workflow** — Lint (`--max-warnings 0`) and test gates added before build. Pre-release channel support (`v*beta*` / `v*rc*` tags marked as prerelease).
+- [x] **GitHub publisher** — Draft releases configured with conditional prerelease flag
 - [x] **First git commit** — `eb910f2 first commit`, pushed to `origin/main`
 - [x] **GitHub repository** — `gstack-dev/G-Notes` exists (verified)
 
 ### Documentation
-- [x] **Screenshots** — 7 screenshots captured in `screenshots/` (dashboard, editor, categories, settings, export, notes, favorites)
-- [x] **README.md** — Feature list, build instructions, keyboard shortcuts, privacy info, screenshots
+- [x] **Screenshots** — 8 screenshots in `screenshots/` (dashboard, editor, categories, settings, export, notes, favorites, search)
+- [x] **README.md** — Feature list, build instructions, keyboard shortcuts, privacy info, 8 screenshots, badges fixed to `gstack-dev`
 - [x] **PRIVACY.md** — Comprehensive privacy policy (updated to 2026)
 - [x] **LICENSE** — MIT (updated to 2026)
 - [x] **DESIGN.md** — Design system specification
 - [x] **CONTRIBUTING.md** — Contribution guidelines
+- [x] **CHANGELOG.md** — Keep a Changelog format with v1.0.0 entries
+- [x] **SECURITY.md** — Vulnerability reporting policy
+- [x] **CODE_OF_CONDUCT.md** — Contributor Covenant v2.1
 - [x] **Issue templates** — Bug report + feature request
 
 ### Dependencies
@@ -36,9 +39,51 @@
 
 ### Platform Testing
 - [x] **Linux** — Tested (confirmed working)
-- [ ] **macOS** — Must test on macOS before release
+- [ ] **macOS** — Must test on macOS before release (no access, documented limitation)
 - [ ] **Windows** — Must test on Windows before release (Squirrel installer)
 - [ ] **Auto-update** — Test from a tagged release
+
+#### Windows Testing Steps
+
+Run on your Windows machine:
+
+```bash
+# 1. Clone and build
+git clone https://github.com/gstack-dev/G-Notes.git
+cd g-notes
+npm install
+npm run make    # produces out/make/squirrel.windows/*.exe
+
+# 2. Run the installer
+# Navigate to out/make/squirrel.windows/ and run the .exe
+
+# 3. Verify
+# - App launches from Start Menu
+# - Can create, edit, delete notes
+# - Categories, favorites, search work
+# - Settings dialog opens
+# - Export/import works
+# - App closes cleanly (no zombie processes)
+```
+
+#### Auto-Update Test Procedure
+
+```bash
+# 1. Tag a release candidate
+git tag -a v1.0.0-rc.1 -m "v1.0.0-rc.1"
+git push origin v1.0.0-rc.1
+
+# 2. Wait for CI to build and create draft release
+# Go to https://github.com/gstack-dev/G-Notes/releases
+
+# 3. Publish the draft release (mark as pre-release)
+
+# 4. On a test machine running an older build:
+# - Wait for auto-update check (runs every hour)
+# - Or restart the app to trigger check
+# - Verify update notification appears
+# - Verify update downloads and installs
+```
 
 ### Repository
 - [x] **package.json URLs** — Updated to match actual remote (`gstack-dev/G-Notes`)
@@ -61,16 +106,29 @@
 
 2. ~~**Fix TypeScript issues**~~ ✅ Done — Fixed 3 `deleted_at` errors, fixed `@types/node` incompatibility by pinning v20
 
-3. ~~**Generate screenshots**~~ ✅ Done — 7 screenshots captured: dashboard, editor, categories, settings, export, notes, favorites
+3. ~~**Generate screenshots**~~ ✅ Done — 8 screenshots captured: dashboard, editor, categories, settings, export, notes, favorites, search
 
 4. ~~**Update README**~~ ✅ Done — Screenshots integrated, copyright year updated, table restructured
 
 5. ~~**Fix CI/CD**~~ ✅ Done — `node-version: 22` (was 18, Electron 43 requires Node 22+)
 
-6. ~~**Set up testing**~~ ✅ Done — Vitest v4.1.9 configured, 31 tests in 4 files (page-store, zust-store, categories-store, utils). Database and IPC handler tests pending (need Electron mocking).
+6. ~~**Set up testing**~~ ✅ Done — Vitest v4.1.9 configured, 53 tests in 5 files (page-store, zust-store, categories-store, utils, database). Database CRUD, categories, prefs, and recent searches fully tested (22 tests).
 
 7. **Dependency audit**
    - 32 vulns (26 high) remain in dev deps (sockjs, uuid, tar). `npm audit fix --force` breaks `@electron-forge/plugin-webpack`. Acceptable for v1.0 but should be reviewed.
+
+### Phase 1b: Pre-Production Gaps (Added)
+
+8. ~~**Capture search.png**~~ ✅ Done — Added `screenshots/search.png` captured with search query "design"
+9. ~~**Fix README badges**~~ ✅ Done — `shnwnw` → `gstack-dev` in all badge URLs
+10. ~~**CI lint+test gates**~~ ✅ Done — `npm run lint -- --max-warnings 0` and `npm run test` run on ubuntu before build
+11. ~~**Pre-release channel**~~ ✅ Done — Tags containing `beta` or `rc` marked as prerelease
+12. ~~**CHANGELOG.md**~~ ✅ Done — Keep a Changelog format, v1.0.0 entries
+13. ~~**SECURITY.md**~~ ✅ Done — Vulnerability reporting policy
+14. ~~**CODE_OF_CONDUCT.md**~~ ✅ Done — Contributor Covenant v2.1
+15. ~~**Database tests**~~ ✅ Done — 22 tests covering notes CRUD, categories, prefs, recent searches, images
+16. ~~**Silent catch blocks**~~ ✅ Done — Added `console.error` logging in auto-updater, localStorage migration, export/import handlers
+17. ~~**Playwright E2E setup**~~ ✅ Done — `playwright.config.ts` + smoke tests in `e2e/`
 
 ### Phase 2: Release (Estimated: 1 day)
 
@@ -175,3 +233,5 @@ This script will:
 | `categories.png` | Categories page | `Ctrl+4` |
 | `export.png` | Export dialog | File > Export as JSON |
 | `settings.png` | Settings dialog | `Ctrl+,` |
+| `favorites.png` | Favorites page | `Ctrl+3` |
+| `notes.png` | Notes page | `Ctrl+2` |
