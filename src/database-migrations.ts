@@ -20,8 +20,17 @@ export function getSchemaVersion(): number {
 
 function applyMigration(version: number, sql: string, post?: () => void): void {
   const db = getDb();
-  db.exec(sql);
-  db.prepare(`INSERT INTO ${SCHEMA_VERSION_TABLE} (version, applied_at) VALUES (?, ?)`).run(version, Date.now());
+  try {
+    db.exec(sql);
+  } catch (e) {
+    if (e instanceof Error && e.message.includes('duplicate column name')) {
+      // Column already exists (e.g. fresh DB created by initDb()), still record version
+      db.prepare(`INSERT OR IGNORE INTO ${SCHEMA_VERSION_TABLE} (version, applied_at) VALUES (?, ?)`).run(version, Date.now());
+      return;
+    }
+    throw e;
+  }
+  db.prepare(`INSERT OR IGNORE INTO ${SCHEMA_VERSION_TABLE} (version, applied_at) VALUES (?, ?)`).run(version, Date.now());
   if (post) post();
 }
 
@@ -67,6 +76,13 @@ const MIGRATIONS: { version: number; description: string; sql: string; post?: ()
       END;
     `,
     post: () => { getDb().exec("INSERT INTO notes_fts(notes_fts) VALUES('rebuild')"); },
+  },
+  {
+    version: 3,
+    description: "Add deleted_at column for soft delete",
+    sql: `
+      ALTER TABLE notes ADD COLUMN deleted_at INTEGER;
+    `,
   },
 ];
 

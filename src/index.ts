@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import squirrelStartup from 'electron-squirrel-startup';
 import { initDb, getDb, createNote, createCategory, closeDb, setPref, getPref } from './database';
 import { registerIpcHandlers } from './ipc-handlers';
 import { runMigrations } from './database-migrations';
@@ -8,7 +9,7 @@ import { runMigrations } from './database-migrations';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-if (require('electron-squirrel-startup')) {
+if (squirrelStartup) {
   app.quit();
 }
 
@@ -211,7 +212,7 @@ app.on('ready', async () => {
 
   if (app.isPackaged) {
     try {
-      const { autoUpdater } = require('electron-updater'); // eslint-disable-line @typescript-eslint/no-var-requires
+      const { autoUpdater } = require('electron-updater'); // eslint-disable-line @typescript-eslint/no-require-imports
       autoUpdater.checkForUpdatesAndNotify().catch(() => {/* periodic check failures are expected offline */});
       setInterval(() => {
         autoUpdater.checkForUpdatesAndNotify().catch(() => {/* periodic check failures are expected offline */});

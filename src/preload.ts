@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron"); // eslint-disable-line @typescript-eslint/no-var-requires
+import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   openExternal: (url: string) => ipcRenderer.invoke("shell:open-external", url),

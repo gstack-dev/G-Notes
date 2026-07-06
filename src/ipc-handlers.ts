@@ -135,7 +135,7 @@ export function registerIpcHandlers(): void {
       filters: [{ name: "Markdown", extensions: ["md"] }],
     });
     if (result.canceled || !result.filePath) throw new Error("Canceled");
-    const TurndownService = require("turndown"); // eslint-disable-line @typescript-eslint/no-var-requires
+    const TurndownService = require("turndown"); // eslint-disable-line @typescript-eslint/no-require-imports
     const turndown = new TurndownService();
     const notes = getNotes().map(normalizeNote);
     const lines: string[] = [];

@@ -96,7 +96,7 @@ export function Dashboard({ onNewNoteClick }: DashboardProps) {
               <rect x="42" y="78" width="96" height="4" rx="2" className="fill-outline-variant/50" />
               <rect x="42" y="90" width="120" height="4" rx="2" className="fill-outline-variant/50" />
               <rect x="42" y="102" width="80" height="4" rx="2" className="fill-outline-variant/50" />
-              <rect x="30" y="144" width="180" height="26" rx="0 0 12 12" className="fill-primary/8" />
+              <rect x="30" y="144" width="180" height="26" rx="12" className="fill-primary/8" />
               <circle cx="60" cy="157" r="4" className="fill-primary/30" />
               <circle cx="76" cy="157" r="4" className="fill-primary/30" />
               <circle cx="92" cy="157" r="4" className="fill-primary/30" />
