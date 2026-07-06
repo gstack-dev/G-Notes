@@ -17,25 +17,17 @@ async function findAppWindow(electronApp: electron.ElectronApplication): Promise
     const title = await w.title().catch(() => '');
     if (title.includes('G-Notes')) return w;
   }
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Timed out waiting for G-Notes window')), 15000);
-    const handler = async (w: Page) => {
+  const deadline = Date.now() + 15000;
+  while (Date.now() < deadline) {
+    const windows = electronApp.windows();
+    for (const w of windows) {
       const title = await w.title().catch(() => '');
-      if (title.includes('G-Notes')) {
-        clearTimeout(timeout);
-        resolve(w);
-      }
-    };
-    electronApp.on('window', handler);
-    for (const w of electronApp.windows()) {
-      w.title().then(title => {
-        if (title.includes('G-Notes')) {
-          clearTimeout(timeout);
-          resolve(w);
-        }
-      }).catch(() => {});
+      if (title.includes('G-Notes')) return w;
     }
-  });
+    await new Promise(r => setTimeout(r, 200));
+  }
+  const titles = await Promise.all(electronApp.windows().map(w => w.title().catch(() => '<error>')));
+  throw new Error(`Timed out waiting for G-Notes window. Existing windows: [${titles.join(', ')}]`);
 }
 
 test.describe('App', () => {

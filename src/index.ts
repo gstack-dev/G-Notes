@@ -207,7 +207,11 @@ const createWindow = (): void => {
 };
 
 app.on('ready', async () => {
-  await initDb();
+  try {
+    await initDb();
+  } catch (err) {
+    console.error("Database init failed:", err);
+  }
   createWindow();
 
   if (app.isPackaged) {
