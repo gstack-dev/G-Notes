@@ -41,11 +41,9 @@ async function findAppWindow(electronApp: electron.ElectronApplication): Promise
 test.describe('G-Notes Smoke Tests', () => {
   test('app launches and shows main window', async () => {
     const appDir = findAppDir();
-    const electronBin = path.join(__dirname, '..', 'node_modules', 'electron', 'dist', 'electron');
     const appAsar = path.join(appDir, 'resources', 'app.asar');
 
     const electronApp = await electron.launch({
-      executablePath: electronBin,
       args: [appAsar, '--no-sandbox', '--disable-gpu'],
     });
 
@@ -59,11 +57,9 @@ test.describe('G-Notes Smoke Tests', () => {
 
   test('app has correct version', async () => {
     const appDir = findAppDir();
-    const electronBin = path.join(__dirname, '..', 'node_modules', 'electron', 'dist', 'electron');
     const appAsar = path.join(appDir, 'resources', 'app.asar');
 
     const electronApp = await electron.launch({
-      executablePath: electronBin,
       args: [appAsar, '--no-sandbox', '--disable-gpu'],
     });
 

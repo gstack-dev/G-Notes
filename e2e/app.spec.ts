@@ -43,11 +43,9 @@ test.describe('App', () => {
     test.setTimeout(60_000);
 
     const appDir = findAppDir();
-    const electronBin = path.join(__dirname, '..', 'node_modules', 'electron', 'dist', 'electron');
     const appAsar = path.join(appDir, 'resources', 'app.asar');
 
     const app = await electron.launch({
-      executablePath: electronBin,
       args: [appAsar, '--no-sandbox', '--disable-gpu'],
     });
     const window = await findAppWindow(app);
@@ -62,11 +60,9 @@ test.describe('App', () => {
     test.setTimeout(60_000);
 
     const appDir = findAppDir();
-    const electronBin = path.join(__dirname, '..', 'node_modules', 'electron', 'dist', 'electron');
     const appAsar = path.join(appDir, 'resources', 'app.asar');
 
     const app = await electron.launch({
-      executablePath: electronBin,
       args: [appAsar, '--no-sandbox', '--disable-gpu'],
     });
     const window = await findAppWindow(app);
