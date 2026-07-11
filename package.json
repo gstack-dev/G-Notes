@@ -1,7 +1,7 @@
 {
   "name": "g-notes",
   "productName": "G-Notes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A private, offline-first notes app powered by SQLite and EditorJS.",
   "main": ".webpack/main",
   "private": true,

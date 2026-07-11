@@ -13,6 +13,10 @@ if (squirrelStartup) {
   app.quit();
 }
 
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.gstack.g-notes');
+}
+
 async function migrateFromLocalStorage(mainWindow: BrowserWindow): Promise<void> {
   const db = getDb();
   const count = db.prepare("SELECT COUNT(*) as c FROM notes").get() as { c: number };

@@ -1,3 +1,4 @@
+import path from 'node:path';
 import type { ForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
@@ -10,6 +11,19 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
+
+const linuxIcons = {
+  '16x16': path.resolve(__dirname, 'icons', '16x16.png'),
+  '24x24': path.resolve(__dirname, 'icons', '24x24.png'),
+  '32x32': path.resolve(__dirname, 'icons', '32x32.png'),
+  '48x48': path.resolve(__dirname, 'icons', '48x48.png'),
+  '64x64': path.resolve(__dirname, 'icons', '64x64.png'),
+  '96x96': path.resolve(__dirname, 'icons', '96x96.png'),
+  '128x128': path.resolve(__dirname, 'icons', '128x128.png'),
+  '256x256': path.resolve(__dirname, 'icons', '256x256.png'),
+  '384x384': path.resolve(__dirname, 'icons', '384x384.png'),
+  '512x512': path.resolve(__dirname, 'icons', '512x512.png'),
+};
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -38,12 +52,14 @@ const config: ForgeConfig = {
     new MakerSquirrel({
       name: 'G-Notes',
       setupIcon: './screen.ico',
+      iconUrl: 'https://raw.githubusercontent.com/gstack-dev/G-Notes/main/screen.ico',
       ...(process.env.CSC_LINK ? {
         signWithParams: `/a /fd SHA256 /f "${process.env.CSC_LINK}" /p "${process.env.CSC_KEY_PASSWORD}" /tr http://timestamp.digicert.com /td SHA256`,
       } : {}),
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({
+      icon: linuxIcons,
       options: {
         name: 'g-notes',
         productName: 'G-Notes',
@@ -51,6 +67,7 @@ const config: ForgeConfig = {
       },
     }),
     new MakerDeb({
+      icon: linuxIcons,
       options: {
         name: 'g-notes',
         productName: 'G-Notes',
