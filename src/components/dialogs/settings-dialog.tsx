@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
-const APP_VERSION = "1.0.0";
-
 export function SettingsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const [version, setVersion] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      window.electronAPI?.getVersion().then(setVersion);
+    }
+  }, [open]);
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -37,7 +43,7 @@ export function SettingsDialog({ open, onOpenChange }: { open: boolean; onOpenCh
             </div>
             <div>
               <h3 className="font-semibold mb-1">Version</h3>
-              <p className="text-xs text-on-surface-variant">{APP_VERSION}</p>
+              <p className="text-xs text-on-surface-variant">{version || "..."}</p>
             </div>
           </div>
         </Dialog.Content>

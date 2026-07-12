@@ -36,7 +36,7 @@ beforeAll(() => {
       saveImage: vi.fn(),
       getImagePath: vi.fn(),
       getVersion: vi.fn(),
-      openFeedback: vi.fn(),
+      getChangelog: vi.fn(),
       cleanExpiredTrash: vi.fn(),
       prefs: {
         get: vi.fn(),

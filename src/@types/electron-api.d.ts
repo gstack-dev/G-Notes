@@ -48,7 +48,7 @@ interface ElectronAPI {
   saveImage: (dataUrl: string) => Promise<string>;
   getImagePath: (name: string) => Promise<string>;
   getVersion: () => Promise<string>;
-  openFeedback: () => Promise<void>;
+  getChangelog: () => Promise<string>;
   cleanExpiredTrash: () => Promise<number>;
 
   prefs: {

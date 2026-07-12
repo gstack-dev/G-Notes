@@ -9,6 +9,7 @@ import { ToastContainer } from "@/components/toast-container";
 import { AboutDialog } from "@/components/dialogs/about-dialog";
 import { SettingsDialog } from "@/components/dialogs/settings-dialog";
 import { ExportImportDialog } from "@/components/dialogs/export-import-dialog";
+import { ChangelogDialog } from "@/components/dialogs/changelog-dialog";
 import { useMenuHandlers } from "@/shared/menu-handlers";
 import { useNotesStore } from "@/shared/zust-store";
 import { OnboardingOverlay } from "@/components/onboarding";
@@ -19,6 +20,7 @@ export function AppShell() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [exportImportOpen, setExportImportOpen] = useState(false);
+  const [changelogOpen, setChangelogOpen] = useState(false);
   const showOnboarding = useNotesStore((s) => s.showOnboarding);
   const dismissOnboarding = useNotesStore((s) => s.dismissOnboarding);
 
@@ -29,6 +31,7 @@ export function AppShell() {
       case "about": setAboutOpen(open); break;
       case "settings": setSettingsOpen(open); break;
       case "exportImport": setExportImportOpen(open); break;
+      case "changelog": setChangelogOpen(open); break;
     }
   };
 
@@ -48,6 +51,7 @@ export function AppShell() {
         <AboutDialog open={aboutOpen} onOpenChange={setAboutOpen} />
         <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
         <ExportImportDialog open={exportImportOpen} onOpenChange={setExportImportOpen} />
+        <ChangelogDialog open={changelogOpen} onOpenChange={setChangelogOpen} />
         <ToastContainer />
         {showOnboarding && <OnboardingOverlay onDismiss={dismissOnboarding} />}
       </div>

@@ -13,9 +13,13 @@ export function useMenuHandlers(setDialog: (key: string, open: boolean) => void)
       "menu:settings": () => setDialog("settings", true),
       "menu:about": () => setDialog("about", true),
       "menu:search": () => {
-        const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
-        searchInput?.focus();
+        usePageStore.getState().setActivePage("notes");
+        setTimeout(() => {
+          const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
+          searchInput?.focus();
+        });
       },
+      "menu:changelog": () => setDialog("changelog", true),
       "menu:navigate": (page: string) => {
         usePageStore.getState().setActivePage(page as Page);
       },

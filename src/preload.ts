@@ -4,7 +4,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openExternal: (url: string) => ipcRenderer.invoke("shell:open-external", url),
 
   on: (channel: string, callback: (...args: unknown[]) => void) => {
-    const validChannels = ["menu:new-note", "menu:export-notes", "menu:import-notes", "menu:settings", "menu:about", "menu:search", "menu:navigate", "menu:trash", "menu:export-markdown"];
+    const validChannels = ["menu:new-note", "menu:export-notes", "menu:import-notes", "menu:settings", "menu:about", "menu:search", "menu:navigate", "menu:trash", "menu:export-markdown", "menu:changelog"];
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, (_event: unknown, ...args: unknown[]) => callback(...args));
     }
@@ -48,7 +48,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveImage: (dataUrl: string) => ipcRenderer.invoke("app:save-image", dataUrl),
   getImagePath: (name: string) => ipcRenderer.invoke("app:get-image-path", name),
   getVersion: () => ipcRenderer.invoke("app:get-version"),
-  openFeedback: () => ipcRenderer.invoke("app:open-feedback"),
+  getChangelog: () => ipcRenderer.invoke("app:get-changelog"),
   cleanExpiredTrash: () => ipcRenderer.invoke("app:clean-expired-trash"),
 
   prefs: {

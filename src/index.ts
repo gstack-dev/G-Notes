@@ -168,11 +168,6 @@ function buildMenu(): void {
           label: 'About G-Notes',
           click: () => BrowserWindow.getFocusedWindow()?.webContents.send('menu:about'),
         },
-        { type: 'separator' },
-        {
-          label: 'Send Feedback',
-          click: () => BrowserWindow.getFocusedWindow()?.webContents.send('menu:feedback'),
-        },
         {
           label: 'What\'s New',
           click: () => BrowserWindow.getFocusedWindow()?.webContents.send('menu:changelog'),

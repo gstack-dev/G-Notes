@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
-const APP_VERSION = "1.0.0";
-
 export function AboutDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const [version, setVersion] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      window.electronAPI?.getVersion().then(setVersion);
+    }
+  }, [open]);
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -18,7 +24,7 @@ export function AboutDialog({ open, onOpenChange }: { open: boolean; onOpenChang
           </div>
           <div className="space-y-3 text-sm">
             <p>
-              <span className="font-semibold">Version</span> {APP_VERSION}
+              <span className="font-semibold">Version</span> {version || "..."}
             </p>
             <p className="text-on-surface-variant leading-relaxed">
               A private, offline-first notes app powered by SQLite and EditorJS. All your data stays on your machine.

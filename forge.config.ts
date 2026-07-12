@@ -83,7 +83,7 @@ const config: ForgeConfig = {
           owner: 'gstack-dev',
           name: 'g-notes',
         },
-        draft: true,
+        draft: false,
         prerelease: false,
       },
     },

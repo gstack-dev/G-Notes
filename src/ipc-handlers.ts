@@ -219,8 +219,13 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle("app:get-version", () => app.getVersion());
 
-  ipcMain.handle("app:open-feedback", () => {
-    shell.openExternal("https://github.com/gstack-dev/G-Notes/issues/new?template=bug-report.yml");
+  ipcMain.handle("app:get-changelog", () => {
+    const changelogPath = path.join(app.getAppPath(), "CHANGELOG.md");
+    try {
+      return fs.readFileSync(changelogPath, "utf-8");
+    } catch {
+      return "# Changelog\n\nNo changelog available.";
+    }
   });
 
   ipcMain.handle("app:clean-expired-trash", () => {
